@@ -5,7 +5,6 @@ const Categories = (sequelize, DataTypes) => {
   {
     timestamps: false,
     tableName: 'Categories',
-    underscored: true,
   });
 
   return Categorie;

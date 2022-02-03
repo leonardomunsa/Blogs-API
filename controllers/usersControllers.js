@@ -1,9 +1,9 @@
 const express = require('express');
-const { User } = require('../models');
-
-const authService = require('../services/authService');
+const { Users } = require('../models');
 
 const userSchema = require('../middlewares/userSchema');
+
+const authService = require('../services/authService');
 
 const errorHandling = require('../utils/errorHandling');
 
@@ -18,10 +18,10 @@ router.post('/', async (req, res) => {
     const { error } = userSchema.validate({ displayName, email, password });
     if (error) throw errorHandling(badRequest, error.message);
   
-    const user = await User.findOne({ where: { email } });
+    const user = await Users.findOne({ where: { email } });
     if (user) throw errorHandling(conflict, 'User already registered');
 
-    await User.create({ displayName, email, password, image });
+    await Users.create({ displayName, email, password, image });
 
     const token = authService.generateToken({ displayName, email });
 
@@ -31,3 +31,5 @@ router.post('/', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+module.exports = router;
