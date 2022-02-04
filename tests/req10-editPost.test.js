@@ -6,8 +6,8 @@ const url = 'http://localhost:3000';
 describe('10 - Sua aplicação deve ter o endpoint PUT `/post/:id`', () => {
   beforeEach(() => {
     shell.exec('npx sequelize-cli db:drop');
-    shell.exec('npx sequelize-cli db:create && npx sequelize-cli db:migrate $');
-    shell.exec('npx sequelize-cli db:seed:all $');
+    shell.exec('npx sequelize-cli db:create && npx sequelize-cli db:migrate');
+    shell.exec('npx sequelize-cli db:seed:all');
   });
 
   it('Será validado que é possível editar um blogpost com sucesso', async () => {

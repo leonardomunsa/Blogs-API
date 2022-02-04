@@ -6,8 +6,8 @@ const url = 'http://localhost:3000';
 describe('6 - Sua aplicação deve ter o endpoint GET `/categories`', () => {
   beforeEach(() => {
     shell.exec('npx sequelize-cli db:drop');
-    shell.exec('npx sequelize-cli db:create && npx sequelize-cli db:migrate $');
-    shell.exec('npx sequelize-cli db:seed:all $');
+    shell.exec('npx sequelize-cli db:create && npx sequelize-cli db:migrate');
+    shell.exec('npx sequelize-cli db:seed:all');
   });
 
   it('Será validado que é possível listar todas as categorias com sucesso', async () => {
