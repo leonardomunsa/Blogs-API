@@ -6,8 +6,8 @@ const url = 'http://localhost:3000';
 describe('2 - Sua aplicação deve ter o endpoint POST `/login`', () => {
   beforeEach(async () => {
     shell.exec('npx sequelize-cli db:drop');
-    shell.exec('npx sequelize-cli db:create && npx sequelize-cli db:migrate');
-    shell.exec('npx sequelize-cli db:seed:all');
+    shell.exec('npx sequelize-cli db:create && npx sequelize-cli db:migrate $');
+    shell.exec('npx sequelize-cli db:seed:all $');
   });
 
   it('Será validado que é possível fazer login com sucesso', async () => {
