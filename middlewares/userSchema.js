@@ -5,7 +5,7 @@ module.exports = Joi.object({
     'string.min': '"displayName" length must be at least 8 characters long',
   }),
   email: Joi.string().required().regex(/^[\w-\\.]+@([\w-])+[\w-\\.]{2,4}$/m).messages({
-    'object.regex': '"email" must bee a valid email',
+    'string.pattern.base': '"email" must be a valid email',
   }),
   password: Joi.string().min(6).required().messages({
     'string.min': '"password" length must be 6 characters long',

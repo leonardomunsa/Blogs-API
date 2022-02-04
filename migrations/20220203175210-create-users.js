@@ -6,10 +6,10 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       displayName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       email: {
         type: Sequelize.STRING,
