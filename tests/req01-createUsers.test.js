@@ -6,7 +6,7 @@ const url = 'http://localhost:3000';
 describe('1 - Sua aplicação deve ter o endpoint POST `/user`', () => {
   beforeEach(() => {
     shell.exec('npx sequelize-cli db:drop');
-    shell.exec('npx sequelize-cli db:create && npx sequelize-cli db:migrate');
+    shell.exec('npx sequelize-cli db:create && npx sequelize-cli db:migrate $');
   });
 
   it('Será validado que é possível cadastrar um usuário com sucesso', async () => {

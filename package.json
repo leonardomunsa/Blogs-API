@@ -9,14 +9,14 @@
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.1.0",
-    "sequelize": "^6.15.0",
+    "sequelize": "^6.3.4",
     "shelljs": "^0.8.5"
   },
   "scripts": {
-    "prestart": "npx sequelize-cli db:create && npx sequelize-cli db:migrate",
+    "prestart": "npx sequelize-cli db:create && npx sequelize-cli db:migrate $",
     "start": "node index.js",
-    "drop": "npx sequelize-cli db:drop",
-    "seed": "npx sequelize-cli db:seed:all",
+    "drop": "npx sequelize-cli db:drop $",
+    "seed": "npx sequelize-cli db:seed:all $",
     "test": "jest --runInBand",
     "test-coverage": "jest --runInBand --coverage",
     "debug": "nodemon index.js",
@@ -28,7 +28,7 @@
     "eslint-plugin-import": "2.22.1",
     "frisby": "2.1.2",
     "jest": "26.0.1",
-    "sequelize-cli": "^6.4.1",
+    "sequelize-cli": "^6.2.0",
     "supertest": "4.0.2"
   }
 }
