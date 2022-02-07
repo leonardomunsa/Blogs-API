@@ -29,7 +29,7 @@ router.post('/', auth, async (req, res, next) => {
 
     const post = await BlogPosts.create({ title, content, userId: id });
 
-    return res.status(created).json({ title, content, userId: id, id: post.id });
+    return res.status(created).json({ id: post.id, title, content, userId: id });
   } catch (error) {
     console.log(`POST POSTS -> ${error.message}`);
     return next(error);

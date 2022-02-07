@@ -54,7 +54,7 @@ router.get('/:id', auth, async (req, res, next) => {
     const { id } = req.params;
     
     const user = await User.findOne({ where: { id } });
-    if (!user) return res.status(notFound).json({ message: 'User not found' });
+    if (!user) return res.status(notFound).json({ message: 'User does not exist' });
 
     return res.status(success).json(user);
   } catch (error) {
