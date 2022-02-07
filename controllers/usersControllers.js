@@ -12,6 +12,7 @@ const {
   conflict,
   created,
   success,
+  notFound,
 } = require('../utils/dictionary');
 
 const router = express.Router();
@@ -42,6 +43,20 @@ router.get('/', auth, async (req, res, next) => {
     const users = await User.findAll();
 
     return res.status(success).json(users);
+  } catch (error) {
+    console.log(`GET USERS -> ${error.message}`);
+    return next(error);
+  }
+});
+
+router.get('/:id', auth, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    
+    const user = await User.findOne({ where: { id } });
+    if (!user) return res.status(notFound).message('User not found');
+
+    return res.status(success).json(user);
   } catch (error) {
     console.log(`GET USERS -> ${error.message}`);
     return next(error);
