@@ -24,7 +24,14 @@ const loginSchema = Joi.object({
   }),
 });
 
+const postSchema = Joi.object({
+  title: Joi.string().required(),
+  categoryIds: Joi.required(),
+  content: Joi.string().required(),
+});
+
 module.exports = {
   userSchema,
   loginSchema,
+  postSchema,
 };
