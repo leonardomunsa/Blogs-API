@@ -1,6 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const usersController = require('./controllers/usersControllers');
+const loginController = require('./controllers/loginControllers');
 const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 app.use('/user', usersController);
+app.use('/login', loginController);
 
 app.use(errorHandler);
 
