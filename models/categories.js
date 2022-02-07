@@ -1,5 +1,5 @@
-const Categories = (sequelize, DataTypes) => {
-  const Categorie = sequelize.define('Categories', {
+module.exports = (sequelize, DataTypes) => {
+  const Categorie = sequelize.define('Categorie', {
     name: DataTypes.STRING,
   },
   {
@@ -9,5 +9,3 @@ const Categories = (sequelize, DataTypes) => {
 
   return Categorie;
 };
-
-module.exports = Categories;
