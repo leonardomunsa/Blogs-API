@@ -18,12 +18,14 @@ router.post('/', auth, async (req, res, next) => {
     
     const { error } = postSchema.validate({ title, categoryIds, content });
     if (error) return res.status(badRequest).json({ message: error.message });
-
-    await categoryIds.forEach(async (id) => {
-      const categorie = await Categorie.findOne({ where: { id } });
-      if (!categorie) return res.status(badRequest).json({ message: '"categoryIds" not found' });
-    });
-
+    
+    const categories = await Promise.all(categoryIds.map((id) =>
+      Categorie.findOne({ where: { id } })));
+    
+    if (categories.includes(null)) { 
+      return res.status(badRequest).json({ message: '"categoryIds" not found' });
+    }
+    
     const { email } = req.user;
     const { id } = await User.findOne({ where: { email } });
 
