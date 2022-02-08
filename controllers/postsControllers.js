@@ -8,6 +8,7 @@ const auth = require('../middlewares/auth');
 const {
   badRequest,
   created,
+  success,
 } = require('../utils/dictionary');
 
 const router = express.Router();
@@ -34,6 +35,22 @@ router.post('/', auth, async (req, res, next) => {
     return res.status(created).json({ id: post.id, title, content, userId: id });
   } catch (error) {
     console.log(`POST POSTS -> ${error.message}`);
+    return next(error);
+  }
+});
+
+router.get('/', auth, async (req, res, next) => {
+  try {
+    const posts = await BlogPosts.findAll({
+      include: [
+        { model: User, as: 'user', attributes: { exclude: ['password'] } },
+        { model: Categorie, as: 'categories', through: { attributes: [] } },
+      ],
+    });
+
+    return res.status(success).json(posts);
+  } catch (error) {
+    console.log(`GET POSTS -> ${error.message}`);
     return next(error);
   }
 });
