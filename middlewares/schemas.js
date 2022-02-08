@@ -30,8 +30,14 @@ const postSchema = Joi.object({
   content: Joi.string().required(),
 });
 
+const updatePostSchema = Joi.object({
+  title: Joi.string().required(),
+  content: Joi.string().required(),
+});
+
 module.exports = {
   userSchema,
   loginSchema,
   postSchema,
+  updatePostSchema,
 };

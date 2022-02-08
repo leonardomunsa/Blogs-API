@@ -1,7 +1,7 @@
 const express = require('express');
 const { BlogPosts, Categorie, User } = require('../models');
 
-const { postSchema } = require('../middlewares/schemas');
+const { postSchema, updatePostSchema } = require('../middlewares/schemas');
 
 const auth = require('../middlewares/auth');
 
@@ -10,6 +10,7 @@ const {
   created,
   success,
   notFound,
+  unauthorized,
 } = require('../utils/dictionary');
 
 const router = express.Router();
@@ -72,6 +73,35 @@ router.get('/:id', auth, async (req, res, next) => {
     return res.status(success).json(post);
   } catch (error) {
     console.log(`GET POST -> ${error.message}`);
+    return next(error);
+  }
+});
+
+const errorMessageCategoryIds = 'Categories cannot be edited';
+const wrongId = 'Unauthorized user';
+
+router.put('/:id', auth, async (req, res, next) => {
+  try {
+    const { email } = req.user;
+    const { id } = req.params;
+    const { title, content, categoryIds } = req.body;
+    
+    if (categoryIds) return res.status(badRequest).json({ message: errorMessageCategoryIds });
+    
+    const { error } = updatePostSchema.validate({ title, content });
+    if (error) return res.status(badRequest).json({ message: error.message });
+
+    const user = await User.findOne({ where: { email } });
+    const post = await BlogPosts.findOne({ where: { id } });
+    if (user.id !== post.userId) return res.status(unauthorized).json({ message: wrongId });
+
+    await BlogPosts.update({ title, content }, { where: { id } });
+    const updatedPost = await BlogPosts.findOne({ where: { id },
+      include: [{ model: Categorie, as: 'categories', through: { attributes: [] } }] });
+    
+    return res.status(success).json(updatedPost);
+  } catch (error) {
+    console.log(`PUT POSTS -> ${error.message}`);
     return next(error);
   }
 });
