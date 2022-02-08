@@ -11,6 +11,7 @@ const {
   success,
   notFound,
   unauthorized,
+  noContent,
 } = require('../utils/dictionary');
 
 const router = express.Router();
@@ -87,7 +88,7 @@ router.put('/:id', auth, async (req, res, next) => {
     const { title, content, categoryIds } = req.body;
     
     if (categoryIds) return res.status(badRequest).json({ message: errorMessageCategoryIds });
-    
+
     const { error } = updatePostSchema.validate({ title, content });
     if (error) return res.status(badRequest).json({ message: error.message });
 
@@ -102,6 +103,25 @@ router.put('/:id', auth, async (req, res, next) => {
     return res.status(success).json(updatedPost);
   } catch (error) {
     console.log(`PUT POSTS -> ${error.message}`);
+    return next(error);
+  }
+});
+
+router.delete('/:id', auth, async (req, res, next) => {
+  try {
+    const { email } = req.user;
+    const { id } = req.params;
+
+    const user = await User.findOne({ where: { email } });
+    const post = await BlogPosts.findOne({ where: { id } });
+    if (!post) return res.status(notFound).json({ message: 'Post does not exist' });
+    if (user.id !== post.userId) return res.status(unauthorized).json({ message: wrongId });
+
+    await BlogPosts.destroy({ where: { id } });
+    
+    return res.status(noContent).json();
+  } catch (error) {
+    console.log(`DELETE POSTS -> ${error.message}`);
     return next(error);
   }
 });
