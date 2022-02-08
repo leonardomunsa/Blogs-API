@@ -1,5 +1,5 @@
 const express = require('express');
-const { BlogPosts, Categorie, User } = require('../models');
+const { BlogPosts, Categorie, User, Sequelize } = require('../models');
 
 const { postSchema, updatePostSchema } = require('../middlewares/schemas');
 
@@ -54,6 +54,27 @@ router.get('/', auth, async (req, res, next) => {
     return res.status(success).json(posts);
   } catch (error) {
     console.log(`GET POSTS -> ${error.message}`);
+    return next(error);
+  }
+});
+
+router.get('/search', auth, async (req, res, next) => {
+  try {
+    const { q } = req.query;
+    const allPosts = await BlogPosts.findAll({ include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Categorie, as: 'categories', through: { attributes: [] } },
+    ] });
+    if (!q) return res.status(success).json(allPosts);
+    const filteredPosts = await BlogPosts.findAll({ where: Sequelize.or(
+      { title: q }, { content: q },
+    ),
+      include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Categorie, as: 'categories', through: { attributes: [] } }] });
+    if (!filteredPosts) return res.status(success).json([]);
+    return res.status(success).json(filteredPosts);
+  } catch (error) {
+    console.log(`GET BY SEARCH -> ${error.message}`);
     return next(error);
   }
 });
