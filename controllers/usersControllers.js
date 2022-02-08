@@ -13,6 +13,7 @@ const {
   created,
   success,
   notFound,
+  noContent,
 } = require('../utils/dictionary');
 
 const router = express.Router();
@@ -59,6 +60,18 @@ router.get('/:id', auth, async (req, res, next) => {
     return res.status(success).json(user);
   } catch (error) {
     console.log(`GET USERS -> ${error.message}`);
+    return next(error);
+  }
+});
+
+router.delete('/me', auth, async (req, res, next) => {
+  try {
+    const { email } = req.user;
+    await User.destroy({ where: { email } });
+    
+    return res.status(noContent).json();
+  } catch (error) {
+    console.log(`DELETE ME -> ${error.message}`);
     return next(error);
   }
 });
