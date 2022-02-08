@@ -9,6 +9,7 @@ const {
   badRequest,
   created,
   success,
+  notFound,
 } = require('../utils/dictionary');
 
 const router = express.Router();
@@ -51,6 +52,26 @@ router.get('/', auth, async (req, res, next) => {
     return res.status(success).json(posts);
   } catch (error) {
     console.log(`GET POSTS -> ${error.message}`);
+    return next(error);
+  }
+});
+
+router.get('/:id', auth, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const post = await BlogPosts.findOne({ where: { id },
+      include: [
+        { model: User, as: 'user', attributes: { exclude: ['password'] } },
+        { model: Categorie, as: 'categories', through: { attributes: [] } },
+      ],
+    });
+
+    if (!post) return res.status(notFound).json({ message: 'Post does not exist' });
+
+    return res.status(success).json(post);
+  } catch (error) {
+    console.log(`GET POST -> ${error.message}`);
     return next(error);
   }
 });
