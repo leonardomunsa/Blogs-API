@@ -58,13 +58,17 @@ router.get('/', auth, async (req, res, next) => {
   }
 });
 
+const getAllPosts = async () => {
+  await BlogPosts.findAll({ include: [
+    { model: User, as: 'user', attributes: { exclude: ['password'] } },
+    { model: Categorie, as: 'categories', through: { attributes: [] } },
+  ] });
+};
+
 router.get('/search', auth, async (req, res, next) => {
   try {
     const { q } = req.query;
-    const allPosts = await BlogPosts.findAll({ include: [
-      { model: User, as: 'user', attributes: { exclude: ['password'] } },
-      { model: Categorie, as: 'categories', through: { attributes: [] } },
-    ] });
+    const allPosts = await getAllPosts();
     if (!q) return res.status(success).json(allPosts);
     const filteredPosts = await BlogPosts.findAll({ where: Sequelize.or(
       { title: q }, { content: q },
